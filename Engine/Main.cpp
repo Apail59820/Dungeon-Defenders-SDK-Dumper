@@ -165,6 +165,8 @@ DWORD WINAPI OnAttach(LPVOID lpParameter)
 		return -1;
 	}
 
+	return 0; // TODO : Remove that after reversing
+
 	printf("Initializing...\n");
 
 	if (!generator->Initialize(lpParameter))
