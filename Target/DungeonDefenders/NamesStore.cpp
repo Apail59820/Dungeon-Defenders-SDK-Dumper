@@ -1,16 +1,10 @@
 #include <windows.h>
 
-#include "PatternFinder.hpp"
 #include "NamesStore.hpp"
 
 #include "EngineClasses.hpp"
 
-template<typename T>
-static inline T GetMovValue(void* address) {
-	signed __int32 relative = *(signed __int32*)((unsigned __int64)address + 1);
-	return reinterpret_cast<T>(relative);
-}
-
+#include "PatternFinder.hpp"
 
 class FNameEntry
 {
@@ -33,19 +27,18 @@ TArray<FNameEntry*>* GlobalNames = nullptr;
 
 bool NamesStore::Initialize()
 {
-	auto address = FindPattern(GetModuleHandleW(nullptr), reinterpret_cast<const unsigned char*>("\x8B\x0D\x00\x00\x00\x00\x83\x3C\x81\x00\x74"), "xx????xxxxx");
+
+	auto address = FindPattern(GetModuleHandleW(L"DunDefGame.exe"), reinterpret_cast<const unsigned char*>("\x8B\x0D\x00\x00\x00\x00\x83\x3C\x81\x00\x74"), "xx????xxxxx");
 
 	if (address == -1)
 	{
 		return false;
 	}
 
-	TArray<FNameEntry*>* ptr = reinterpret_cast<TArray<FNameEntry*>*>(GetMovValue<void*>(reinterpret_cast<void*>(address)));
-
-	GlobalNames = ptr;
+	GlobalNames = reinterpret_cast<decltype(GlobalNames)>(*reinterpret_cast<uint32_t*>(address + 2));
 
 	printf("GObjects : 0x%p\n", (void*)GlobalNames);
-	//printf("GObjects count : %d\n\n", GlobalNames->Num());
+	printf("GObjects count : %d\n\n", GlobalNames->Num());
 
 	return true;
 }
