@@ -165,7 +165,7 @@ DWORD WINAPI OnAttach(LPVOID lpParameter)
 		return -1;
 	}
 
-	return 0; // TODO : Remove that after reversing
+	
 
 	printf("Initializing...\n");
 
@@ -201,6 +201,8 @@ DWORD WINAPI OnAttach(LPVOID lpParameter)
 	{
 		Dump(outputDirectory);
 	}
+
+	return 0; // TODO : Remove that after reversing
 
 	fs::create_directories(outputDirectory);
 

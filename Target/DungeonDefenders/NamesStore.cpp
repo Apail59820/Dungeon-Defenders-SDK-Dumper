@@ -9,17 +9,15 @@
 class FNameEntry
 {
 public:
-	uint32_t Flags;
-	char pad_0x0004[0xC];
+	char pad_0x0004[0x10];
 	union
 	{
-		char Name[1024];
-		char* NamePtr;
+		char Name[0x10];
 	};
 
 	const char* GetName() const
 	{
-		return Flags & 0x4000 ? NamePtr : Name;
+		return Name;
 	}
 };
 

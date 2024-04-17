@@ -124,20 +124,15 @@ class UObject
 {
 public:
 	FPointer		VTableObject;
-	FPointer		HashNext;
-	FQWord			ObjectFlags;
+	uint32_t		InternalIndex;
+	unsigned char	UnknownData[0x20];
 	UObject*		Outer;
-	UObject*		ObjectArchetype;
-	FPointer		StateFrame;
-	UObject*		Linker;
-	int32_t			nDynRefsIndex;
-	int32_t			InternalIndex;
 	FName			Name;
-	FPointer		LinkerIndex;
-	UClass*			Class;
-	int32_t			NetIndex;
-	FPointer		HashOuterNext;
+	UObject*		Class;
+	UObject*		ObjectArchetype;
 };
+
+// I stopped reversing here ;)
 
 class UField : public UObject
 {
