@@ -11,8 +11,8 @@ struct FPointer
 
 struct FQWord
 {
-	int A;
-	int B;
+	uint32_t A;
+	uint32_t B;
 };
 
 struct FName
@@ -120,23 +120,22 @@ struct FScriptDelegate
 
 class UClass;
 
-class UObject
+class UObject // Looks good.
 {
 public:
 	FPointer		VTableObject;
 	uint32_t		InternalIndex;
-	unsigned char	UnknownData[0x20];
+	unsigned char	UnknownData00[0x20];
 	UObject*		Outer;
 	FName			Name;
 	UObject*		Class;
 	UObject*		ObjectArchetype;
 };
 
-// I stopped reversing here ;)
-
 class UField : public UObject
 {
 public:
+	UField*			SuperField;
 	UField*			Next;
 };
 
@@ -156,10 +155,9 @@ class UStruct : public UField
 {
 public:
 	char			UnknownData00[0x08];
-	UField*			SuperField;
 	UField*			Children;
-	unsigned long	PropertySize;
-	char			UnknownData01[0x48];
+	uint32_t		PropertySize;
+	char			UnknownData01[0x3C];
 };
 
 class UScriptStruct : public UStruct
@@ -171,41 +169,39 @@ public:
 class UFunction : public UStruct
 {
 public:
-	unsigned long	FunctionFlags;
-	unsigned short	iNative;
-	unsigned short	RepOffset;
-	uint8_t			OperPrecedence;
+	uint32_t		FunctionFlags;
+	uint16_t		iNative;
+	uint16_t 		RepOffset;
 	FName			FriendlyName;
-	uint8_t			NumParms;
-	unsigned short	ParmsSize;
-	unsigned short	ReturnValueOffset;
+	uint16_t		NumParms;
+	uint16_t		ParamSize;
+	uint32_t		ReturnValueOffset;
+	char			UnknownData01[0x04];
 	void*			Func;
 };
 
 class UState : public UStruct
 {
 public:
-	char			UnknownData00[0x48];
+	char			UnknownData00[0x54];
 };
 
-class UClass : public UStruct
+class UClass : public UState
 {
 public:
-	char			UnknownData00[136];
-	UObject*		DefaultObject;
-	char			UnknownData01[112];
+	char			UnknownData00[0xF0];
 };
 
 class UProperty : public UField
 {
 public:
-	unsigned long	ArrayDim;
-	unsigned long	ElementSize;
-	FQWord			PropertyFlags;
-	unsigned long	PropertySize;
-	char			UnknownData00[0x0C];
-	unsigned long	Offset;
-	char			UnknownData01[0x0C];
+	uint32_t		ArrayDim;
+	uint32_t		ElementSize;
+	uint32_t		PropertyFlags; // Not sure about where the fuck this should be.
+	uint32_t		PropertySize;
+	char			UnknownData00[0x10];
+	uint32_t		Offset;
+	char			UnknownData01[0x1C];
 };
 
 class UByteProperty : public UProperty

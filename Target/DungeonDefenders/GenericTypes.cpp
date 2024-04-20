@@ -161,7 +161,7 @@ size_t UEProperty::GetElementSize() const
 //---------------------------------------------------------------------------
 UEPropertyFlags UEProperty::GetPropertyFlags() const
 {
-	return static_cast<UEPropertyFlags>(static_cast<UProperty*>(object)->PropertyFlags.A);
+	return static_cast<UEPropertyFlags>(static_cast<UProperty*>(object)->PropertyFlags);
 }
 //---------------------------------------------------------------------------
 size_t UEProperty::GetOffset() const
